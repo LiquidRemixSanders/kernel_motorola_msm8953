@@ -197,6 +197,37 @@ static int __get_v4l2_format32(struct v4l2_format __user *kp,
 {
 	u32 type;
 
+	switch (type) {
+	case V4L2_BUF_TYPE_VIDEO_OVERLAY:
+	case V4L2_BUF_TYPE_VIDEO_OUTPUT_OVERLAY: {
+		u32 clipcount;
+
+		if (get_user(clipcount, &up->fmt.win.clipcount))
+			return -EFAULT;
+		if (clipcount > 2048)
+			return -EINVAL;
+		*size = clipcount * sizeof(struct v4l2_clip);
+		return 0;
+	}
+	default:
+		*size = 0;
+		return 0;
+	}
+}
+
+static int bufsize_v4l2_format(struct v4l2_format32 __user *up, u32 *size)
+{
+	if (!access_ok(VERIFY_READ, up, sizeof(*up)))
+		return -EFAULT;
+	return __bufsize_v4l2_format(up, size);
+}
+
+static int __get_v4l2_format32(struct v4l2_format __user *kp,
+			       struct v4l2_format32 __user *up,
+			       void __user *aux_buf, u32 aux_space)
+{
+	u32 type;
+
 	if (get_user(type, &up->type) || put_user(type, &kp->type))
 		return -EFAULT;
 

@@ -5500,7 +5500,11 @@ static void ufshcd_exception_event_handler(struct work_struct *work)
 	hba = container_of(work, struct ufs_hba, eeh_work);
 
 	pm_runtime_get_sync(hba->dev);
+<<<<<<< HEAD
 	ufshcd_scsi_block_requests(hba);
+=======
+	scsi_block_requests(hba->host);
+>>>>>>> drunk/linux-3.18.y
 	err = ufshcd_get_ee_status(hba, &status);
 	if (err) {
 		dev_err(hba->dev, "%s: failed to get exception status %d\n",
@@ -8418,9 +8422,12 @@ EXPORT_SYMBOL(ufshcd_system_suspend);
 
 int ufshcd_system_resume(struct ufs_hba *hba)
 {
+<<<<<<< HEAD
 	int ret = 0;
 	ktime_t start = ktime_get();
 
+=======
+>>>>>>> drunk/linux-3.18.y
 	if (!hba)
 		return -EINVAL;
 
@@ -8450,13 +8457,17 @@ EXPORT_SYMBOL(ufshcd_system_resume);
  */
 int ufshcd_runtime_suspend(struct ufs_hba *hba)
 {
+<<<<<<< HEAD
 	int ret = 0;
 	ktime_t start = ktime_get();
 
+=======
+>>>>>>> drunk/linux-3.18.y
 	if (!hba)
 		return -EINVAL;
 
 	if (!hba->is_powered)
+<<<<<<< HEAD
 		goto out;
 	else
 		ret = ufshcd_suspend(hba, UFS_RUNTIME_PM);
@@ -8466,6 +8477,9 @@ out:
 		hba->curr_dev_pwr_mode,
 		hba->uic_link_state);
 	return ret;
+=======
+		return 0;
+>>>>>>> drunk/linux-3.18.y
 
 }
 EXPORT_SYMBOL(ufshcd_runtime_suspend);
@@ -8493,13 +8507,17 @@ EXPORT_SYMBOL(ufshcd_runtime_suspend);
  */
 int ufshcd_runtime_resume(struct ufs_hba *hba)
 {
+<<<<<<< HEAD
 	int ret = 0;
 	ktime_t start = ktime_get();
 
+=======
+>>>>>>> drunk/linux-3.18.y
 	if (!hba)
 		return -EINVAL;
 
 	if (!hba->is_powered)
+<<<<<<< HEAD
 		goto out;
 	else
 		ret = ufshcd_resume(hba, UFS_RUNTIME_PM);
@@ -8632,6 +8650,11 @@ static void ufshcd_add_spm_lvl_sysfs_nodes(struct ufs_hba *hba)
 	hba->spm_lvl_attr.attr.mode = S_IRUGO | S_IWUSR;
 	if (device_create_file(hba->dev, &hba->spm_lvl_attr))
 		dev_err(hba->dev, "Failed to create sysfs for spm_lvl\n");
+=======
+		return 0;
+
+	return ufshcd_resume(hba, UFS_RUNTIME_PM);
+>>>>>>> drunk/linux-3.18.y
 }
 
 static inline void ufshcd_add_sysfs_nodes(struct ufs_hba *hba)
